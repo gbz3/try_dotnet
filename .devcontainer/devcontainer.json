@@ -1,0 +1,32 @@
+{
+  "name": ".NET Development",
+  "image": "mcr.microsoft.com/devcontainers/dotnet:1-10.0-bookworm",
+  
+  // Features to add to the dev container
+  "features": {
+    "ghcr.io/devcontainers/features/dotnet:2": {
+      "version": "latest",
+      "installUsingApt": true
+    }
+  },
+
+  // Configure tool-specific properties
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-dotnettools.csdevkit",
+        "ms-dotnettools.csharp",
+        "ms-dotnettools.vscode-dotnet-runtime"
+      ],
+      "settings": {
+        "dotnet.defaultSolution": "BlazorApp02/BlazorApp02.sln"
+      }
+    }
+  },
+
+  // Use 'forwardPorts' to make a list of ports inside the container available locally
+  "forwardPorts": [5000, 5001],
+
+  // Use 'postCreateCommand' to run commands after the container is created
+  "postCreateCommand": "dotnet restore BlazorApp02/BlazorApp02.sln"
+}
