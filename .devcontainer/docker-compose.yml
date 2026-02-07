@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  app:
+    image: mcr.microsoft.com/devcontainers/dotnet:1-10.0-bookworm
+    volumes:
+      - ../..:/workspaces:cached
+    command: sleep infinity
+    network_mode: service:db
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=localhost,1433;Database=BlazorApp;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    restart: unless-stopped
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=YourStrong@Passw0rd
+      - MSSQL_PID=Developer
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+
+volumes:
+  sqlserver-data:
