@@ -55,10 +55,25 @@ dotnet add package Microsoft.EntityFrameworkCore.Design
 ## 接続確認
 
 ```bash
-# SQL Server CLIツールのインストール（オプション）
-docker exec -it sqlserver /opt/mssql-tools/bin/sqlcmd \
+# バージョン確認 ✓
+docker exec -it sqlserver /opt/mssql-tools18/bin/sqlcmd \
   -S localhost -U sa -P YourStrong@Passw0rd \
-  -Q "SELECT @@VERSION"
+  -C -Q "SELECT @@VERSION"
+
+# データベース作成 ✓
+docker exec sqlserver /opt/mssql-tools18/bin/sqlcmd \
+  -S localhost -U sa -P YourStrong@Passw0rd -C \
+  -Q "CREATE DATABASE BlazorApp"
+
+# データベース一覧表示
+docker exec sqlserver /opt/mssql-tools18/bin/sqlcmd \
+  -S localhost -U sa -P YourStrong@Passw0rd -C \
+  -Q "SELECT name FROM sys.databases"
+
+# テーブル作成とデータ挿入の例
+docker exec sqlserver /opt/mssql-tools18/bin/sqlcmd \
+  -S localhost -U sa -P YourStrong@Passw0rd -C -d BlazorApp \
+  -Q "CREATE TABLE Users (Id INT PRIMARY KEY, Name NVARCHAR(100)); INSERT INTO Users VALUES (1, 'Test User'); SELECT * FROM Users;"
 ```
 
 ## コンテナ管理
