@@ -24,3 +24,17 @@ using (var pubs = new ConsoleApp06.Data.PubsDbContext(builder.Options))
     Console.WriteLine($"One: {result2?.AuthorId}: {result2?.AuthorFirstName} {result2?.AuthorLastName}");
 
 }
+
+using (var pubs = new ConsoleApp06.Data.PubsDbContext(builder.Options))
+{
+    var query = pubs.Stores.Select(st => new
+    {
+        st.StoreId,
+        st.StoreName,
+        TotalSales = st.Sales.Sum(sales => sales.Title.Price * sales.Quantity)
+    });
+    foreach (var store in query)
+    {
+        Console.WriteLine($"{store.StoreId}: {store.StoreName} - Total Sales: {store.TotalSales:C}");
+    }
+}
