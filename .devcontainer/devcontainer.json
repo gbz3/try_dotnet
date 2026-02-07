@@ -4,14 +4,6 @@
   "service": "app",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
   
-  // Features to add to the dev container
-  "features": {
-    "ghcr.io/devcontainers/features/dotnet:2": {
-      "version": "latest",
-      "installUsingApt": true
-    }
-  },
-
   // Configure tool-specific properties
   "customizations": {
     "vscode": {
@@ -31,5 +23,5 @@
   "forwardPorts": [5000, 5001, 1433],
 
   // Use 'postCreateCommand' to run commands after the container is created
-  "postCreateCommand": "dotnet restore BlazorApp02/BlazorApp02.sln"
+  "postCreateCommand": "bash -c 'curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 10.0 --install-dir /usr/share/dotnet && dotnet restore BlazorApp02/BlazorApp02.sln'"
 }
