@@ -4,6 +4,11 @@
   "service": "app",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
   
+  // Mount Docker socket from host  
+  "mounts": [
+    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+  ],
+
   // Configure tool-specific properties
   "customizations": {
     "vscode": {
@@ -11,7 +16,8 @@
         "ms-dotnettools.csdevkit",
         "ms-dotnettools.csharp",
         "ms-dotnettools.vscode-dotnet-runtime",
-        "ms-mssql.mssql"
+        "ms-mssql.mssql",
+        "ms-azuretools.vscode-docker"
       ],
       "settings": {
         "dotnet.defaultSolution": "BlazorApp02/BlazorApp02.sln"
@@ -23,5 +29,8 @@
   "forwardPorts": [5000, 5001, 1433],
 
   // Use 'postCreateCommand' to run commands after the container is created
-  "postCreateCommand": "bash -c 'curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 10.0 --install-dir /usr/share/dotnet && dotnet restore BlazorApp02/BlazorApp02.sln'"
+  "postCreateCommand": "bash -c 'curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 10.0 --install-dir /usr/share/dotnet && sudo rm -f /etc/apt/sources.list.d/yarn.list && sudo apt-get update && sudo apt-get install -y docker.io docker-compose && dotnet restore BlazorApp02/BlazorApp02.sln'",
+
+  // Use 'postStartCommand' to initialize database on container start
+  "postStartCommand": "bash -c 'sleep 40 && CONTAINER_ID=$(sudo docker ps --filter name=db --format \"{{.ID}}\" | head -1) && [ -n \"$CONTAINER_ID\" ] && sudo docker exec $CONTAINER_ID bash /usr/local/bin/init-db.sh 2>/dev/null || echo \"DB initialization skipped\"'"
 }

@@ -21,6 +21,8 @@ services:
       - "1433:1433"
     volumes:
       - sqlserver-data:/var/opt/mssql
+      - ./init-db.sh:/usr/local/bin/init-db.sh:ro
+      - ../BlazorApp02/ConsoleApp06:/docker-entrypoint-initdb.d:ro
 
 volumes:
   sqlserver-data:
